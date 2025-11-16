@@ -2,3 +2,4 @@ Personal project where I want to explore Hierarchical matrices and Calderon prec
 
 The main aim is to create a fast, kernel independent (although start with Helmholtz and Laplace) hierarchical matrix constructor with some linalg methods (LU, svg, ...) to go with it (+ explore C interface to look into calling in BEM project). All while having a spot of fun. 
 
+the code is disgustingly commented but I'm new to rust bear with me.
