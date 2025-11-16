@@ -1,5 +1,7 @@
-mod kernels;
-use kernels::*;
+//mod kernels;
+//use kernels::*;
+
+use hmats_rs::*;
 
 fn main() {
     let x = [0.0_f64, 0.0];
