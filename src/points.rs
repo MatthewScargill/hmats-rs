@@ -1,1 +1,0 @@
-// this is for points normals and possibly and the like (need to figure out the range that greens fucntions need)

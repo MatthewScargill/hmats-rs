@@ -12,8 +12,7 @@ pub trait Kernel<const D: usize> {
 pub struct Laplace2D; // simple 2D Laplace
 pub struct Helmholtz2D { pub wavenumber: f64, normal_deriv: bool}
 
-
-// new method for ease of setting k later on -- Helmholtz2D::new(3.02, false) .. maybe add normal_deriv as a const at runtime
+// new method for ease of setting k and normal deriv later on -- eg. Helmholtz2D::new(3.02, false)
 impl Helmholtz2D {
     pub fn new(wavenumber: f64, normal_deriv: bool) -> Self { Self {wavenumber, normal_deriv}}
     }
@@ -52,7 +51,8 @@ impl Kernel<2> for Helmholtz2D {
 
         // decided to make the kernel eval require &self, now we separate G and dG inside the eval with a Bool
         if self.normal_deriv {
-            // normal derivative of the 2d helmholtz green's function here
+            // normal derivative of the 2d helmholtz green's function here 
+            // x, y, and normals will be taken from Nodes as and when 
             Complex64::i() * PI * r * 0.25
         }
 
