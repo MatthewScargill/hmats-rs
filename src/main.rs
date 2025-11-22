@@ -14,7 +14,7 @@ fn main() {
     // trying out the nodes 
     let mut testpoints = Vec::new();
     testpoints.push([0.0, 0.0]);
-    testpoints.push([0.5, 0.0]);
+    testpoints.push([0.4, 0.2]);
     testpoints.push([0.5, 0.5]);
     testpoints.push([0.0, 0.5]);
 
@@ -35,7 +35,7 @@ fn main() {
 
     constructor(&nodetest, Laplace2D);
 
-    let idx = [0,2];
+    let idx = [0,1,3];
     let bboxtest = nodetest.bbox_from_indices(&idx);
 
     println!("min values of the bounding box = {:?}", bboxtest.min);

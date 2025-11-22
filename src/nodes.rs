@@ -32,8 +32,8 @@ impl <const D: usize> BBox<D> {
         assert!(!pts.is_empty()); // need points
 
         // find min in each dimension of all points to build global min and max for bounding box
-        let mut min = pts[0]; 
-        let mut max = pts[0];
+        let mut min: [f64; D] = pts[0]; 
+        let mut max: [f64; D] = pts[0];
         for p in pts.iter().skip(1) {
             for d in 0..D {
                 if p[d] < min[d] {min[d] = p[d]} // replace with new min
@@ -49,8 +49,8 @@ impl <const D: usize> BBox<D> {
         let dim = D as f64;
 
         for d in 0..D {
-            let temp = (self.min[d] + self.max[d])/ dim ;
-            centre.push(temp);
+            let centre_i = (self.min[d] + self.max[d])/ dim ;
+            centre.push(centre_i);
         }
         centre 
     }
@@ -61,8 +61,8 @@ impl <const D: usize> BBox<D> {
 impl <const D: usize> Nodes<D> {
     pub fn bbox_from_indices(&self, idxs: &[usize]) -> BBox<D> {
         assert!(!idxs.is_empty());
-        let mut min = self.points[idxs[0]];
-        let mut max = self.points[idxs[0]];
+        let mut min: [f64; D] = self.points[idxs[0]];
+        let mut max: [f64; D] = self.points[idxs[0]];
         for &i in idxs.iter().skip(1) {
             let p = self.points[i];
             for d in 0..D {
