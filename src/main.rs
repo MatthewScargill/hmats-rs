@@ -22,18 +22,18 @@ fn main() {
     println!("ith node value = {:?}", nodetest.point(2));
 
 
-    fn constructor<GreensFunction: Kernel<D>> (nodes: &Nodes<D>, greensfunction: GreensFunction) { // need to find a way to generalise greensfunction to any type
+    fn constructor(nodes: &Nodes<D>, greensfunction: impl Kernel<D>) { // need to find a way to generalise greensfunction to any type
         for i in 0..4 as usize {
             for j in 0..4 as usize {
                 let coord1 = nodes.point(i);
                 let coord2 = nodes.point(j);
-                let laptest = Laplace2D.eval(&coord1, &coord2);
-                println!("{}th row, {}th column, cell value = {:?}", i, j, laptest);
+                let laptest = greensfunction.eval(&coord1, &coord2);
+                println!("{}th row, {}th column, cell value = {:?}", i, j, 7);
             }
         }
     }
 
-    constructor(&nodetest, Laplace2D); 
+    constructor(&nodetest, laplace); 
 
     let idx = [0,1,3];
     let bboxtest = nodetest.bbox_from_indices(&idx);

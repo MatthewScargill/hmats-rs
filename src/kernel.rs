@@ -10,7 +10,7 @@ pub trait Kernel<const D: usize> {
 
 // main kernel public structures (keeping it 2D for now)
 pub struct Laplace2D; // simple 2D Laplace
-pub struct Helmholtz2D { pub wavenumber: f64, normal_deriv: bool}
+pub struct Helmholtz2D { pub wavenumber: f64, pub normal_deriv: bool}
 
 // new method for ease of setting k and normal deriv later on -- eg. Helmholtz2D::new(3.02, false)
 impl Helmholtz2D {
