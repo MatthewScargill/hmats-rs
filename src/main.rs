@@ -22,7 +22,7 @@ fn main() {
     println!("ith node value = {:?}", nodetest.point(2));
 
 
-    fn constructor(nodes: &Nodes<D>, greensfunction: Laplace2D) { // need to find a way to generalise greensfunction to any type
+    fn constructor<GreensFunction: Kernel<D>> (nodes: &Nodes<D>, greensfunction: GreensFunction) { // need to find a way to generalise greensfunction to any type
         for i in 0..4 as usize {
             for j in 0..4 as usize {
                 let coord1 = nodes.point(i);
@@ -33,7 +33,7 @@ fn main() {
         }
     }
 
-    constructor(&nodetest, Laplace2D);
+    constructor(&nodetest, Laplace2D); 
 
     let idx = [0,1,3];
     let bboxtest = nodetest.bbox_from_indices(&idx);
