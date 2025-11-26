@@ -13,6 +13,7 @@ name = "hmats-rs"
 version = "0.1.0"
 dependencies = [
  "num-complex",
+ "scilib",
 ]
 
 [[package]]
@@ -31,4 +32,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "scilib"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "acf03303d83bf30bb4a4637ac7b3d9e4fa96c51e4d8960043d552e0fb4937cb3"
+dependencies = [
+ "num-complex",
 ]

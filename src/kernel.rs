@@ -1,5 +1,6 @@
 use num_complex::{Complex, Complex64};
 use std::f64::consts::PI;
+use scilib::math::bessel::*;
 
 // Kernels saved as traits for independence
 // all kernels will return Complex64 because is easier than going through a general scalar
@@ -9,8 +10,6 @@ pub trait Kernel<const D: usize> {
 // as is, requires eval functions to return Complex64
 
 // ---------------- LAPLACE KERNEL ----------------------
-
-// main kernel public structures (keeping it 2D for now)
 pub struct Laplace; // simple 2D Laplace
 
 // implementing Kernel trait for 2D laplace struct
@@ -59,7 +58,7 @@ impl Helmholtz {
 // implementing Kernel trait for Helmholtz
 impl Kernel<2> for Helmholtz {
 
-    // Green function eval method -- probably need to add new trait about G or dG 
+    // Green function eval method 
     fn eval( &self, x: &[f64; 2], y: &[f64; 2]) -> Complex64 {
         // bog standard
         let dx = x[0] - y[0];
@@ -67,11 +66,11 @@ impl Kernel<2> for Helmholtz {
         let r2 = dx*dx + dy*dy;
         let r = r2.max(1e-15).sqrt();
 
-        // kr and hankel stuff needed
-        // let kr = Self.k * r;
-        // let h0 = hankel0_1(kr); find the fast hankel crate and implement 
+        // special hankel stuff
+        let kr = Complex64 {re: self.wavenumber * r, im: 0.0};
+        let h0 = h1_nu(0.0,kr); 
 
-        Complex64::i() * PI * r * 0.25 
+        (Complex64::i()/4.0) * h0 // using scilib in 2d, bempp stuff for 3d
     }
 }
 
@@ -103,11 +102,3 @@ impl Kernel<2> for HelmholtzNormal {
         
     }
 }
-
-// Generalised greens function stuff for calling 
-pub enum GreensFunction {
-    Laplace,
-    Helmholtz,
-    HelmholtzNormal
-} 
-

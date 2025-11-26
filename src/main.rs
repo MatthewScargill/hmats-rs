@@ -33,7 +33,7 @@ fn main() {
         }
     }
 
-    constructor(&nodetest, Laplace); 
+    constructor(&nodetest, Helmholtz{wavenumber: 3.2}); 
     let idx = [0,1,3];
     let bboxtest = nodetest.bbox_from_indices(&idx);
 

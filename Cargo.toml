@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 num-complex = "0.4.6"
+scilib = "1.0.0"
 
