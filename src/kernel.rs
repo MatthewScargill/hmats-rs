@@ -1,6 +1,7 @@
 use num_complex::{Complex, Complex64};
-use std::f64::consts::PI;
+use std::f64::consts::{PI,E};
 use scilib::math::bessel::*;
+use num_complex::ComplexFloat;
 
 // Kernels saved as traits for independence
 // all kernels will return Complex64 because is easier than going through a general scalar
@@ -71,6 +72,25 @@ impl Kernel<2> for Helmholtz {
         let h0 = h1_nu(0.0,kr); 
 
         (Complex64::i()/4.0) * h0 // using scilib in 2d, bempp stuff for 3d
+    }
+}
+
+impl Kernel<3> for Helmholtz {
+
+    // Green function eval method 
+    fn eval( &self, x: &[f64; 3], y: &[f64; 3]) -> Complex64 {
+        // bog standard
+        let dx = x[0] - y[0];
+        let dy = x[1] - y[1];
+        let r2 = dx*dx + dy*dy;
+        let r = r2.max(1e-15).sqrt();
+        // technically should be norm(r) so will check that out later
+
+        // exponent kernel
+        let ikr = Complex64 {re: 0.0, im: self.wavenumber * r};
+        let exponent = E.powc(ikr);
+
+        - (1.0/(4.0 * PI * r)) * exponent
     }
 }
 

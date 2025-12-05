@@ -70,6 +70,6 @@ impl <const D: usize> Nodes<D> {
                 if p[d] > max[d] { max[d] = p[d]}
             }
         }
-        BBox { min, max }
+        BBox { min, max}
     }
 }
