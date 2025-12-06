@@ -4,9 +4,8 @@ fn main() {
     const D: usize=3; //dimension needs to be set early on in computation as a const for openess -- see kenel definition
     let x = [0.0, 0.0];
     let y = [4.0, 0.0];
-    let laplace = Laplace; // don't really need this as its own object
-    let val = laplace.eval(&x, &y);
-    println!("Laplace Greens function = {:?}", val);
+    let val = Laplace.eval(&x, &y);
+    println!("Laplace Greens function = {:?}", val.re); // can chuck .re on it when using laplace 
 
     // trying out the nodes 
     let mut testpoints = Vec::new();
