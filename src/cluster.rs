@@ -19,11 +19,22 @@ pub struct ClusterNode<const D: usize> {
 // just a collection of cluster nodes, read of relationships from individual nodes
 pub struct ClusterTree<const D: usize> {
     pub nodes: Vec<ClusterNode<D>>,
+    pub id: usize
 }
 
 impl<const D: usize> ClusterTree<D> {
     // tree builder which will recursively split until each "tree tip" reaches a certain amount of points 
     // lump all the cluster nodes together with logical indices 
+    
+    pub fn build(nodes: &Nodes<D>, leaf_size: usize) -> Self {
+        let mut tree = ClusterTree { nodes: Vec::new(), id:0};
+
+        // start with all indices
+        let all_indices: Vec<usize> = (0..nodes.points.len()).collect();
+        let id = tree.build_node(nodes, all_indices, 0, leaf_size);
+        tree.id = id;
+        tree
+    }
 
     fn build_node(&mut self, nodes: &Nodes<D>, indices: Vec<usize>, level: u32, leaf_size: usize) -> usize { 
 
