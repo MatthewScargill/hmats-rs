@@ -16,7 +16,7 @@ pub struct ClusterNode<const D: usize> {
 
 // no build cluster node in its own impl as can't do recursion that way 
 
-// just a collection of cluster nodes, read of relationships from individual nodes
+// just a collection of cluster nodes, read off relationships from individual nodes
 pub struct ClusterTree<const D: usize> {
     pub nodes: Vec<ClusterNode<D>>,
     pub id: usize
