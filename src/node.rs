@@ -57,10 +57,10 @@ impl <const D: usize> BBox<D> {
         centre 
     }
 
-    pub fn BBox_distance(source_BBox: BBox<D>, target_BBox: BBox<D>) -> f64 {
+    pub fn bbox_distance(source_bbox: BBox<D>, target_bbox: BBox<D>) -> f64 {
         
-        let source_centre = source_BBox.centre();
-        let target_centre = target_BBox.centre();
+        let source_centre = source_bbox.centre();
+        let target_centre = target_bbox.centre();
         let distance: f64 = euclidean(&source_centre, &target_centre);
 
         distance
