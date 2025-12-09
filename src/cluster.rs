@@ -72,7 +72,7 @@ impl<const D: usize> ClusterTree<D> {
         sorted.sort_by(|&i, &j| { // i and j are the indices being compared
             nodes.points[i][longest_dim] // going through points along longest_dim 
                 .partial_cmp(&nodes.points[j][longest_dim]) // comparing against other indices 
-                .unwrap() // have been told always to add when working with Option
+                .unwrap() // extract the value from option produced by partial_cmp
         });
         // leaves us with sorted vector with indices organised by value in longest_dim
 

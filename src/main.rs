@@ -15,14 +15,14 @@ fn main() {
     testpoints.push([0.0, 0.5, 0.3]);
 
     let nodetest = Nodes::new(testpoints);
-    println!("ith node value = {:?}", nodetest.point(2));
+    println!("ith node value = {:?}", nodetest.points[2]);
 
 
     fn constructor(nodes: &Nodes<D>, greensfunction: impl Kernel<D>) { // accepts anything with Kernel trait
         for i in 0..4 as usize {
             for j in 0..4 as usize {
-                let coord1 = nodes.point(i);
-                let coord2 = nodes.point(j);
+                let coord1 = nodes.points[i];
+                let coord2 = nodes.points[j];
                 let laptest = greensfunction.eval(&coord1, &coord2);
                 println!("{}th row, {}th column, cell value = {:?}", i, j, laptest);
             }
