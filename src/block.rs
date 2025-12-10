@@ -57,22 +57,62 @@ impl BlockTree {
             
             // filter for blocks far away from each other 
             if is_far {
-                let id = self.nodes.len();
+                let id: usize = self.nodes.len();
                 self.nodes.push(BlockNode {target_index, source_index, children: None, block_type: BlockType::Far});
                 return id
             }
 
             // class close leaves as Near
             if target_is_leaf && source_is_leaf {
-                let id = self.nodes.len();
+                let id: usize = self.nodes.len();
                 self.nodes.push(BlockNode {target_index, source_index, children: None, block_type: BlockType::Near});
                 return id
             }
 
             // recursive block building yay
-            else {
-                0
+            else { // ie close and not leaves
+
+                // child indices 
+                let mut child_indices: Vec<usize> = Vec::new();
+
+                match (target_cluster.children ,source_cluster.children) {
+
+                    // both clusters have children
+                    (Some([tc0, tc1]), Some([sc0, sc1])) => {
+                        for &tci in &[tc0, tc1] {
+                            for &sci in &[sc0, sc1] {
+                                let child: usize = self.build_blocks(tci, sci, target_tree, source_tree, max_dist);
+                                child_indices.push(child);
+                            }
+                        }
+                    }
+
+                    // the source cluster is a leaf
+                    (Some([tc0, tc1]), None) => {
+                        for &tci in &[tc0, tc1] {
+                            let child = self.build_blocks(tci, source_index, target_tree, source_tree, max_dist);
+                            child_indices.push(child);
+                        }
+                    }
+
+                    // the target cluster is a leaf
+                    (None, Some([s0, s1])) => {
+                        for &sci in &[s0, s1] {
+                            let child = self.build_blocks(target_index, sci, target_tree, source_tree, max_dist);
+                            child_indices.push(child);
+                        }
+                    }
+
+                    (None, None) => unreachable!("Leaf leaf interaction taken care of above."),
+                }
+                // lovely lovely spacetime crunch
+
+                // add BlockNode to Blocktree 
+                self.nodes.push(BlockNode { target_index, source_index, children: Some(child_indices), block_type: BlockType::Near });
+
+                // return number of BlockNodes created from above (target_indices, source_indices
+                let id: usize = self.nodes.len();
+                id
             }
         }
-    
 }
