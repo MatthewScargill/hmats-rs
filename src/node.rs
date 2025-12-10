@@ -1,6 +1,5 @@
 use distances::vectors::euclidean;
 
-
 // Nodes structure to hold points (and later boundary data in the case of dG problems)
 pub struct Nodes<const D: usize> {
     pub points: Vec<[f64; D]>,
@@ -57,7 +56,7 @@ impl <const D: usize> BBox<D> {
         centre 
     }
 
-    pub fn bbox_distance(source_bbox: BBox<D>, target_bbox: BBox<D>) -> f64 {
+    pub fn bbox_distance(source_bbox: &BBox<D>, target_bbox: &BBox<D>) -> f64 {
         
         let source_centre = source_bbox.centre();
         let target_centre = target_bbox.centre();

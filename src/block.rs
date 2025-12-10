@@ -1,5 +1,5 @@
-use crate::node::{Nodes, BBox};
-use crate::cluster::{ClusterNode,ClusterTree};
+use crate::node::BBox;
+//use crate::cluster::{ClusterNode,ClusterTree};
 
 // convert ClusterTree to BlockTree with admissibility checks 
 
@@ -10,7 +10,7 @@ pub enum BlockType {
 }
 
 // don't think i really need D for this because by the time it gets here we've funneled it down a fair bit
-// can the logic be D free / rely only on impl logic further of the line
+// can the logic be D free / rely only on impl logic further up the line
  
 pub struct BlockNode{
     pub t: usize, // index of Cluster node in source Ctree
@@ -26,3 +26,7 @@ pub struct BlockTree {
     pub id: usize
 }
 
+pub fn admissible<const D: usize>(source_bbox: &BBox<D>, target_bbox: &BBox<D>, max_dist: f64) -> bool {
+    let dist: f64 = BBox::bbox_distance(source_bbox, target_bbox);
+    dist < max_dist // True if close enough for full resolution
+}
