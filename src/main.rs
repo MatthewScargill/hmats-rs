@@ -37,6 +37,10 @@ fn main() {
     println!("min values of the bounding box = {:?}", bboxtest.min);
     println!("centre of the bounding box = {:?}", bboxtest.centre());
 
-    let testtree = ClusterTree::build_tree(&nodetest, 1);
-    testtree.print();
+    let testclustertree = ClusterTree::build_tree(&nodetest, 1);
+
+    let _testblocktree = BlockTree::build_tree(&testclustertree, &testclustertree, 0.3);
+
+    testclustertree.print();
+
 }

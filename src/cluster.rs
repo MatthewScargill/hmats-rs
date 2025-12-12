@@ -5,7 +5,7 @@ use crate::node::{Nodes, BBox};
 pub struct ClusterNode<const D: usize> {
     pub bbox: BBox<D>,
     pub indices: Vec<usize>,  // indices into Nodes.points
-    pub children: Option<[usize; 2]>, // indices into ClusterTree.nodes
+    pub children: Option<[usize; 2]>, // indices into ClusterTree.nodes or None
     pub level: u32, // how many splits have we had to this box? 0 = root bbox
 }
 
@@ -79,8 +79,10 @@ impl<const D: usize> ClusterTree<D> {
 
     // dumb tree build tester
     pub fn print(&self) {
+        let mut i = 0;
         for node in &self.nodes {
-            println!("level: {}", &node.level)
+            println!("level: {}, index: {}",&node.level, i); i += 1;
         }
+        println!("self id: {}", &self.id)
     }
 }

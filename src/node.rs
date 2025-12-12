@@ -47,7 +47,7 @@ impl <const D: usize> BBox<D> {
     pub fn centre(&self) -> Vec<f64>{ 
 
         let mut centre: Vec<f64> = Vec::new();
-        let dim = D as f64;
+        let dim: f64 = D as f64;
 
         for d in 0..D {
             let centre_i: f64 = (self.min[d] + self.max[d])/ dim ;

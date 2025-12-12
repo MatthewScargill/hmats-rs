@@ -44,7 +44,7 @@ impl BlockTree {
             let source_bbox: &BBox<D> = &source_cluster.bbox;
 
             // proximity check
-            let are_far: bool = is_far(source_bbox, target_bbox, max_dist);
+            let too_far: bool = is_far(source_bbox, target_bbox, max_dist);
 
             // check if blocks are leaves 
             let target_is_leaf: bool = target_cluster.children.is_none();
@@ -56,7 +56,7 @@ impl BlockTree {
             // close but one is not a leaf -- recursion into smaller blocks like in cluster
             
             // filter for blocks far away from each other 
-            if are_far {
+            if too_far {
                 let id: usize = self.nodes.len();
                 self.nodes.push(BlockNode {target_index, source_index, children: None, block_type: BlockType::Far});
                 return id
