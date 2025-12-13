@@ -11,7 +11,7 @@ pub struct ClusterNode<const D: usize> {
 
 pub struct ClusterTree<const D: usize> {
     pub nodes: Vec<ClusterNode<D>>,
-    pub id: usize // number of ClusterNodes in tree 
+    pub root_id: usize // index of root ClusterNode (len(.nodes)-1)
 }
 
 impl<const D: usize> ClusterTree<D> {
@@ -24,9 +24,9 @@ impl<const D: usize> ClusterTree<D> {
 
         // check if alrady contains max number of points  -> terminate branch (== leaf node)
         if indices.len() <= leaf_size {
-            let id: usize = self.nodes.len();
+            let root_id: usize = self.nodes.len();
             self.nodes.push( ClusterNode{ bbox, indices, children: None, level});
-            return id;
+            return root_id;
         }
 
         // finding dim and length of side to split down
@@ -57,23 +57,23 @@ impl<const D: usize> ClusterTree<D> {
         let right_id: usize = self.build_nodes(nodes, right_indices, level + 1, leaf_size);
         // spacetime scrunches up here
 
-        // return total number of produced nodes - 1
-        let id: usize = self.nodes.len(); // taken before last push so can be used as index
+        // return total number of produced nodes - 1 ie. index of root ClusterNode
+        let root_id: usize = self.nodes.len(); // taken before last push so can be used as index
 
         // add this ClusterNode to ClusterTree, children ClusterNodes also added recursively
         self.nodes.push(ClusterNode { bbox, indices: sorted, children: Some([left_id, right_id]), level});
         
-        id 
+        root_id 
     }
 
     pub fn build_tree(nodes: &Nodes<D>, leaf_size: usize) -> Self {
 
-        let mut tree: ClusterTree<D> = ClusterTree { nodes: Vec::new(), id:0};
+        let mut tree: ClusterTree<D> = ClusterTree { nodes: Vec::new(), root_id:0};
 
         // for full tree, simply run build_nodes with all Node indices
         let all_indices: Vec<usize> = (0..nodes.points.len()).collect();
-        let id: usize = tree.build_nodes(nodes, all_indices, 0, leaf_size);
-        tree.id = id;
+        let root_id: usize = tree.build_nodes(nodes, all_indices, 0, leaf_size);
+        tree.root_id = root_id;
         tree
     }
 
@@ -83,6 +83,6 @@ impl<const D: usize> ClusterTree<D> {
         for node in &self.nodes {
             println!("level: {}, index: {}",&node.level, i); i += 1;
         }
-        println!("self id: {}", &self.id)
+        println!("self root_id: {}", &self.root_id)
     }
 }

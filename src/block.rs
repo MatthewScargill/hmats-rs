@@ -21,9 +21,10 @@ pub struct BlockNode{
 
 pub struct BlockTree {
     pub nodes: Vec<BlockNode>,
-    pub id: usize
+    pub root_id: usize
 }
 
+// this should be switched our for something that takes bbox size into account 
 pub fn is_far<const D: usize>(source_bbox: &BBox<D>, target_bbox: &BBox<D>, max_dist: f64) -> bool {
     let dist: f64 = BBox::bbox_distance(source_bbox, target_bbox);
     dist > max_dist // True if too far for full resolution
@@ -55,16 +56,16 @@ impl BlockTree {
             
             // filter for blocks far away from each other 
             if too_far {
-                let id: usize = self.nodes.len();
+                let root_id: usize = self.nodes.len();
                 self.nodes.push(BlockNode {target_index, source_index, children: None, block_type: BlockType::Far});
-                return id
+                return root_id
             }
 
             // class close leaves as Near
             if target_is_leaf && source_is_leaf {
-                let id: usize = self.nodes.len();
+                let root_id: usize = self.nodes.len();
                 self.nodes.push(BlockNode {target_index, source_index, children: None, block_type: BlockType::Near});
-                return id
+                return root_id
             }
 
             // recursive block building yay
@@ -106,25 +107,25 @@ impl BlockTree {
                 // lovely lovely spacetime crunch
 
                 // return number of BlockNodes created from above (target_indices, source_indices) - 1
-                let id: usize = self.nodes.len(); // taken before last push so can be used as index
+                let root_id: usize = self.nodes.len(); // taken before last push so can be used as index
 
                 // add BlockNode to Blocktree 
                 self.nodes.push(BlockNode { target_index, source_index, children: Some(child_indices), block_type: BlockType::Near });
 
-                id
+                root_id
             }
         }
 
         pub fn build_tree<const D: usize>(target_tree: &ClusterTree<D>, source_tree: &ClusterTree<D>, max_dist: f64) -> Self {
 
-            let mut tree: BlockTree = BlockTree { nodes: Vec::new(), id: 0 };
+            let mut tree: BlockTree = BlockTree { nodes: Vec::new(), root_id: 0 };
 
-            let target_index: usize = target_tree.id;
-            let source_index: usize = source_tree.id;
+            let target_index: usize = target_tree.root_id;
+            let source_index: usize = source_tree.root_id;
 
-            let id: usize = tree.build_blocks(target_index, source_index, target_tree, source_tree, max_dist);
+            let root_id: usize = tree.build_blocks(target_index, source_index, target_tree, source_tree, max_dist);
 
-            tree.id = id;
+            tree.root_id = root_id;
             tree
         }
 }
