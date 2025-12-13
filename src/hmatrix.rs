@@ -100,11 +100,11 @@ impl<const D: usize, K: Kernel<D>> HMatrix<D, K> {
                 let stored_block: BlockStorage = match block.block_type {
                     BlockType::Near => {
                         // this is purely hypothetical mind you
-                        let dense: DenseBlock = Self::build_dense_block(target_nodes, source_nodes, &rows, &cols, &kernel);
+                        let dense: DenseBlock = Self::build_dense_block(target_nodes, source_nodes, rows, cols, &kernel);
                         BlockStorage::Dense(dense)
                     }
                     BlockType::Far => {
-                        let lowrank: LowRankBlock = Self::build_LR_block(target_nodes, source_nodes, &rows, &cols, &kernel);
+                        let lowrank: LowRankBlock = Self::build_LR_block(target_nodes, source_nodes, rows, cols, &kernel);
                         BlockStorage::LowRank(lowrank)
                     }
                 };
@@ -113,5 +113,32 @@ impl<const D: usize, K: Kernel<D>> HMatrix<D, K> {
 
             Self { block_tree, blocks, kernel, n_rows, n_cols}
     }
-    
+
+    pub fn build_dense_block(target_nodes: &Nodes<D>, source_nodes: &Nodes<D>,
+        rows: Vec<usize>, cols: Vec<usize>, kernel: &K) -> DenseBlock {
+
+        // preallocation is a lovely thing
+        let m: usize = rows.len();
+        let n: usize = cols.len();
+        let mut data: Vec<Complex64> = Vec::with_capacity(m * n);
+
+        // a war with the borrow checker was fought here
+        for &i in &rows { // row major 
+            let xi: &[f64; D] = &target_nodes.points[i];
+            for &j in &cols {
+                let yj: &[f64; D] = &source_nodes.points[j];
+                data.push(kernel.eval(xi, yj));
+            }
+        }
+        DenseBlock {rows, cols, data}
+    }
+
+
+    pub fn build_LR_block(target_nodes: &Nodes<D>, source_nodes: &Nodes<D>,
+        rows: &Vec<usize>, cols: &Vec<usize>, kernel: &K) -> LowRankBlock {
+
+    }
+
+
 }
+
