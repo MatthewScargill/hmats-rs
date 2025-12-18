@@ -30,10 +30,10 @@ pub struct LowRankBlock {
     pub cols: Vec<usize>, // indices into source Nodes 
 
     // keep rank < min(rows, columns) == number of columns in U and V, how much resolution do you want to keep?
-    pub rank: usize,
+    //pub rank: usize,
 
-    pub u: Vec<Complex64>, // len(rows) x rank matrix
-    pub v: Vec<Complex64>, // len(col) x rank matrix 
+    //pub u: Vec<Complex64>, // len(rows) x rank matrix
+    //pub v: Vec<Complex64>, // len(col) x rank matrix 
     // row major as above 
 }
 
@@ -135,8 +135,9 @@ impl<const D: usize, K: Kernel<D>> HMatrix<D, K> {
 
 
     pub fn build_LR_block(target_nodes: &Nodes<D>, source_nodes: &Nodes<D>,
-        rows: &Vec<usize>, cols: &Vec<usize>, kernel: &K) -> LowRankBlock {
+        rows: Vec<usize>, cols: Vec<usize>, kernel: &K) -> LowRankBlock {
 
+            LowRankBlock{ rows, cols}
     }
 
 
