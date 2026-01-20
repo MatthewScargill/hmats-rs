@@ -17,7 +17,7 @@ pub struct ClusterTree<const D: usize> {
 impl<const D: usize> ClusterTree<D> {
 
     // recursive ClusterNode builder from indices into Nodes
-    fn build_nodes(&mut self, nodes: &Nodes<D>, indices: Vec<usize>, level: u32, leaf_size: usize) -> usize { 
+    fn build_nodes(&mut self, nodes: &Nodes<D>, mut indices: Vec<usize>, level: u32, leaf_size: usize) -> usize { 
 
         // create a bounding box of given indices 
         let bbox: BBox<D> = nodes.bbox_from_indices(&indices); // will break if indices empty, see Nodes impl
@@ -29,7 +29,7 @@ impl<const D: usize> ClusterTree<D> {
             return root_id;
         }
 
-        // finding longest dim to split down
+        // find longest dim to split down
         let longest_dim: usize = (0..D) // range 
             .max_by(|&a, &b| { // compare dims borrowed from longest_dims
                 let len_a: f64 = bbox.max[a] - bbox.min[a]; 
@@ -38,30 +38,30 @@ impl<const D: usize> ClusterTree<D> {
             })
             .unwrap();
 
-        let mut sorted: Vec<usize> = indices;
-        sorted.sort_by(|&i, &j| {
+        // directly sort indices as no need for them to be unsorted later on -- saves allocation
+        indices.sort_by(|&i, &j| {
             nodes.points[i][longest_dim] // sort indices along longest_dim
                 .partial_cmp(&nodes.points[j][longest_dim]) // comparing i against j indices
                 .unwrap() // extract Ordering for sort_by
         });
 
-        // bisect sorted
-        let mid: usize = sorted.len() / 2;
-        let left_indices: Vec<usize> = sorted[..mid].to_vec();
-        let right_indices: Vec<usize> = sorted[mid..].to_vec();
+        // bisect around mid
+        let mid: usize = indices.len() / 2;
+        let left_indices: Vec<usize> = indices[..mid].to_vec();
+        let right_indices: Vec<usize> = indices[mid..].to_vec();
 
         // recursion to build children bboxes, from left and right indices
         let left_id: usize = self.build_nodes(nodes, left_indices, level + 1, leaf_size);
         let right_id: usize = self.build_nodes(nodes, right_indices, level + 1, leaf_size);
-        // spacetime scrunches up here
+        // spacetime scrunch
 
         // return total number of produced nodes - 1 ie. index of root ClusterNode
         let root_id: usize = self.nodes.len(); // taken before last push so can be used as index
 
         // add this ClusterNode to ClusterTree, children ClusterNodes also added recursively
-        self.nodes.push(ClusterNode { bbox, indices: sorted, children: Some([left_id, right_id]), level});
-        
-        root_id 
+        self.nodes.push(ClusterNode { bbox, indices: indices, children: Some([left_id, right_id]), level});
+
+        root_id
     }
 
     pub fn build_tree(nodes: &Nodes<D>, leaf_size: usize) -> Self {
@@ -75,14 +75,31 @@ impl<const D: usize> ClusterTree<D> {
         tree
     }
 
-    // dumb tree build tester
+    // tree build printer
     pub fn print(&self) {
-        let mut i = 0;
-        for node in &self.nodes {
-            println!("level: {}, index: {}",&node.level, i); i += 1;
-        }
-        println!("self root_id: {}", &self.root_id)
+        self.print_node(self.root_id, 0);
+        println!("Total nodes: {}", self.nodes.len());
+        println!("Root ID: {}", self.root_id);
     }
+
+    fn print_node(&self, node_id: usize, depth: usize) {
+        let node: &ClusterNode<D> = &self.nodes[node_id];
+        let indent: String = "  ".repeat(depth);
+        println!(
+            "{}Node {}: level={}, points={}, leaf={}",
+            indent,
+            node_id,
+            node.level,
+            node.indices.len(),
+            node.children.is_none()
+        );
+
+        if let Some([left, right]) = node.children {
+            self.print_node(left, depth + 1);
+            self.print_node(right, depth + 1);
+        }
+    }
+
 }
 
 #[cfg(test)] 
