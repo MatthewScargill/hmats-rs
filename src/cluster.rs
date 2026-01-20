@@ -103,9 +103,9 @@ impl<const D: usize> ClusterTree<D> {
 }
 
 #[cfg(test)] 
-mod ClusterTree_tests { 
+mod cluster_tree_tests { 
 
-    use super::*; 
+    // use super::*; 
 
     // separate tests for each input error? 
     // think of things which could go wrong?
