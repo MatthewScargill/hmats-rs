@@ -1,4 +1,4 @@
-use crate::node::{Nodes, BBox};
+use crate::nodes::{Nodes, BBox};
 
 // individual node of the tree containing indices of a fraction of the total nodes
 // relationships between nodes to be kept with each node

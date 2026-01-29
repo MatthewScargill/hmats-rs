@@ -1,4 +1,4 @@
-use crate::node::BBox;
+use crate::nodes::BBox;
 use crate::cluster::{ClusterNode, ClusterTree};
 
 

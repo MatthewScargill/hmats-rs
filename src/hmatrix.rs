@@ -1,6 +1,6 @@
 use num_complex::Complex64;
-use crate::kernel::Kernel;
-use crate::node::Nodes;
+use crate::kernels::Kernel;
+use crate::nodes::Nodes;
 use crate::cluster::{ClusterTree, ClusterNode};
 use crate::block::{BlockTree, BlockType};
 
