@@ -16,8 +16,7 @@ fn main() {
 
     let nodetest = Nodes::new(testpoints);
     println!("ith node value = {:?}", nodetest.points[2]);
-
-
+    
     fn constructor(nodes: &Nodes<D>, greensfunction: impl Kernel<D>) { // accepts anything with Kernel trait
         for i in 0..4 as usize {
             for j in 0..4 as usize {
@@ -31,15 +30,15 @@ fn main() {
 
     constructor(&nodetest, Helmholtz{wavenumber: 3.0}); 
     let idx = [0,1,3];
-    let bboxtest = nodetest.bbox_from_indices(&idx);
+    let bboxtest: BBox<D> = nodetest.bbox_from_indices(&idx);
 
 
     println!("min values of the bounding box = {:?}", bboxtest.min);
     println!("centre of the bounding box = {:?}", bboxtest.centre());
 
-    let testclustertree = ClusterTree::build_tree(&nodetest, 1);
+    let testclustertree: ClusterTree<D> = ClusterTree::build_tree(&nodetest, 1);
 
-    let _testblocktree = BlockTree::build_tree(&testclustertree, &testclustertree, 0.3);
+    let _testblocktree: BlockTree = BlockTree::build_tree(&testclustertree, &testclustertree, 0.4);
 
     testclustertree.print();
 

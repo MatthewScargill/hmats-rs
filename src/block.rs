@@ -15,7 +15,7 @@ pub enum BlockType {
 
 // don't think i really need D for this because by the time it gets here we've funneled it down a fair bit
 // can the logic be D free / rely only on impl logic further up the line
- 
+
  // source and target will later translate to column and row 
 pub struct BlockNode{
     pub target_index: usize, // index of Cluster node in target Ctree
@@ -130,6 +130,9 @@ impl BlockTree {
             let source_index: usize = source_tree.root_id;
 
             let root_id: usize = tree.build_blocks(target_index, source_index, target_tree, source_tree, max_dist);
+
+                
+            print!("blocktree succesfully built");
 
             tree.root_id = root_id;
             tree

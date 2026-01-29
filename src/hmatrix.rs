@@ -99,7 +99,6 @@ impl<const D: usize, K: Kernel<D>> HMatrix<D, K> {
                 // sort into resolution function based off of block type 
                 let stored_block: BlockStorage = match block.block_type {
                     BlockType::Near => {
-                        // this is purely hypothetical mind you
                         let dense: DenseBlock = Self::build_dense_block(target_nodes, source_nodes, rows, cols, &kernel);
                         BlockStorage::Dense(dense)
                     }
@@ -139,7 +138,4 @@ impl<const D: usize, K: Kernel<D>> HMatrix<D, K> {
 
             LowRankBlock{ rows, cols}
     }
-
-
 }
-

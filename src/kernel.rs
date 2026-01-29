@@ -20,7 +20,7 @@ impl<const D: usize> Kernel<D> for Laplace {
         let r: f64 = temp_r.max(1e-15); // must find neater way of dealing with r=0
 
         // Laplace Green's functions for 2 and 3 dimensions
-        if D == 2 { return Complex { re:- (1.0 / (2.0 * std::f64::consts::PI)) * r.ln(), im: 0.0}} 
+        if D == 2 { return Complex { re:- (1.0 / (2.0 * std::f64::consts::PI)) * r.ln(), im: 0.0}}
         if D == 3 { return Complex64 { re: 1.0 / (4.0 * std::f64::consts::PI * r), im: 0.0 }}
         else { panic!()} // must be better way of doing this, maybe in Nodes new impl
     }

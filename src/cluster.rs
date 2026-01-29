@@ -38,12 +38,14 @@ impl<const D: usize> ClusterTree<D> {
             })
             .unwrap();
 
-        // directly sort indices as no need for them to be unsorted later on -- saves allocation
+        // directly sort indices as no need for them to be unsorted later on -- saves allocation but indices has to be mutable
+        // if the longest dim is the same across iteration unecessary but honestly that's splitting hairs
         indices.sort_by(|&i, &j| {
             nodes.points[i][longest_dim] // sort indices along longest_dim
                 .partial_cmp(&nodes.points[j][longest_dim]) // comparing i against j indices
                 .unwrap() // extract Ordering for sort_by
         });
+        // nice to use an iterator but will compare against old function for large Nodes
 
         // bisect around mid
         let mid: usize = indices.len() / 2;

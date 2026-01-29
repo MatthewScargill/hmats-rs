@@ -3,6 +3,7 @@ pub mod node;
 pub mod cluster;
 pub mod block;
 pub mod hmatrix;
+pub mod functions;
 
 pub use kernel::{Kernel, Laplace, Helmholtz};
 pub use node::{Nodes, BBox};
